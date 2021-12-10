@@ -29,15 +29,8 @@ class HomeComponent extends Component {
       this.setState({ awards: res.data.awards })
     })
 
-    axios.get(config.geturl() + `tweets`).then((res) => {
-      this.setState({ tweets: res.data.tweets })
-
-      for (let i = 0; i < this.state.tweets.length; i++) {
-        if (this.state.tweets[i].status === 'ACCEPTED') {
-          //console.log("happend")
-          this.state.newtweets.push(this.state.tweets[i])
-        }
-      }
+    axios.get(config.geturl() + `tweets?status=ACCEPTED`).then((res) => {
+      this.setState({ newtweets: res.data.tweets })
     })
   }
 
@@ -83,7 +76,7 @@ class HomeComponent extends Component {
                         src={tweet.userImage}
                         style={{ height: '60px', width: '60px' }}
                         alt=''
-                      ></img>
+                      />
                     </Card.Title>
 
                     <Card.Title className='mb-2 text-dark'>
@@ -162,11 +155,7 @@ class HomeComponent extends Component {
                       Event Description: {event.description}
                     </Card.Subtitle>
 
-                    <img
-                      src={event.images}
-                      style={{ height: '50% ' }}
-                      alt=''
-                    ></img>
+                    <img src={event.images} style={{ height: '50% ' }} alt=''></img>
                   </Card.Body>
                 </Card>
               </Col>

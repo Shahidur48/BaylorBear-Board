@@ -8,7 +8,6 @@ import Register from './pages/Register/Register'
 import Grant from './pages/Grant/Grant'
 import Forbidden from './pages/Forbidden/Forbidden'
 import Academic from './pages/Academic/Academic'
-import NotFound from './pages/NotFound/NotFound'
 import Profile from './pages/Profile/Profile'
 import AddUser from './pages/AddUser/AddUser'
 import { ToastContainer } from 'react-toastify'
@@ -39,7 +38,7 @@ function App() {
         <div className='main-content'>
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route exact path='/tweets' component={Tweets} />
+            <Route exact path='/tweets/:id?' component={Tweets} />
             <Route exact path='/grant' component={Grant} />
             <Route exact path='/admintweet' component={AdminTweet} />
             <Route exact path='/adminpage' component={AdminPage} />
@@ -83,7 +82,7 @@ function App() {
               component={UpdateGrantComponent}
             ></Route>
 
-            <Route path='' component={NotFound} />
+            {/* <Route path='' component={NotFound} /> */}
           </Switch>
         </div>
       </div>
