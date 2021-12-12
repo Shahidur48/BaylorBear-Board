@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
-import { Container, Row, Col, Card, Button } from 'react-bootstrap'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { listTweets } from '../../actions/userActions'
+import { Container, Row, Col, Card } from 'react-bootstrap'
 import Meta from '../../components/Meta'
 import './Tweets.scss'
 import axios from 'axios'
-import AddIcon from '@mui/icons-material/Add'
 import config from '../../services/config'
-import { Link } from 'react-router-dom'
 import SockJsClient from 'react-stomp'
-import Pagination from '../../components/Pagination'
 
 class Tweets extends Component {
 
