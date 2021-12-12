@@ -1,80 +1,64 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Container, Row, Col, Card, Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { listTweets } from '../../actions/userActions'
 import Meta from '../../components/Meta'
 import './Tweets.scss'
+import axios from 'axios'
 import AddIcon from '@mui/icons-material/Add'
+import config from '../../services/config'
 import { Link } from 'react-router-dom'
 import SockJsClient from 'react-stomp'
 import Pagination from '../../components/Pagination'
 
-const Tweets = () => {
-  const dispatch = useDispatch()
-  const tweetList = useSelector((state) => state.tweetList)
-  const { loading, error, tweets } = tweetList
+class Tweets extends Component {
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  constructor(props) {
+    super(props)
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage] = useState(6)
+    this.change = this.change.bind(this)
 
-  useEffect(() => {
-    dispatch(listTweets())
-  }, [dispatch])
-
-  function refreshPage() {
-    window.location.reload(true)
-  }
-
-  function change(str) {
-    if (str.message === 'a') {
-      const element = document.getElementById(str.name) // Get element
-      if (element != null) {
-        element.style.visibility = 'visible'
-        console.log('changed on Database')
-      } else {
-        refreshPage()
-      }
-    }
-
-    if (str.message === 'c') {
-      refreshPage()
+    this.state = {
+      tweets: [],
     }
   }
 
-  const indexOfLastPost = currentPage * postsPerPage
-  const indexOfFirstPost = indexOfLastPost - postsPerPage
-  const currentTweets = tweets.slice(indexOfFirstPost, indexOfLastPost)
+  change(str) {
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+    console.log(str)
+    console.log("woo")
+    
 
-  return (
+      axios.get(config.geturl() + `tweets?status=ACCEPTED`).then((res) => {
+      this.setState({ tweets: res.data.tweets })
+    })     
+    
+  }
+
+  componentDidMount() {
+    axios.get(config.geturl() + `tweets?status=ACCEPTED`).then((res) => {
+      this.setState({ tweets: res.data.tweets })
+    })
+  }
+
+
+
+ 
+
+
+render() {
+    return (
     <>
       <Meta title='Tweets' />
       <Container fluid className='home-container'>
-        {userInfo && userInfo.role === 'ADMIN' ? (
-          <Row className='justify-content-end m-2'>
-            <Link to='/whitelist-users'>
-              <Button variant='success'>
-                <AddIcon />
-                Add Whitelist User
-              </Button>
-            </Link>
-          </Row>
-        ) : (
-          ''
-        )}
-        {loading ? (
-          <></>
-        ) : error ? (
-          <></>
-        ) : (
+        
+          
+        
+        
           <Container fluid>
             <Row className='card-container'>
-              {currentTweets.map((tweet) => (
+              {this.state.tweets.map((tweet) => (
                 <Col id='col' lg={4} md={6} key={tweet.id}>
                   <Card id={tweet.id}>
                     <Card.Body>
@@ -96,13 +80,9 @@ const Tweets = () => {
                 </Col>
               ))}
             </Row>
-            <Pagination
-              postsPerPage={postsPerPage}
-              totalPosts={tweets.length}
-              paginate={paginate}
-            />
+            
           </Container>
-        )}
+        
       </Container>
 
       <div>
@@ -113,12 +93,13 @@ const Tweets = () => {
           //onDisconnect={console.log("Disconnected!")}
           onMessage={(msg) => {
             console.log(msg.name)
-            change(msg)
+            this.change(msg)
           }}
         />
       </div>
     </>
   )
+}
 }
 
 export default Tweets

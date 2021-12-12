@@ -23,6 +23,11 @@ class HomeComponent extends Component {
   }
 
   change(str) {
+
+if(document.getElementById(str.name) != null)
+{
+    console.log(str.name)
+    console.log("woo")
     if (str.message === 'a') {
       axios.put(
         config.geturl() + 'tweets/' + str.name + '/status?status=ACCEPTED'
@@ -44,6 +49,7 @@ class HomeComponent extends Component {
       document.getElementById(str.name).innerHTML = 'PENDING'
       document.getElementById(str.name).style.backgroundColor = '#008000'
     }
+  }
   }
 
   send(str) {
@@ -95,7 +101,7 @@ class HomeComponent extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.tweets.map((tweets) => (
+            {this.state.tweets.reverse().map((tweets) => (
               <tr key={tweets.user}>
                 <td> {tweets.user} </td>
                 <td> {tweets.text} </td>

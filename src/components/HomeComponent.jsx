@@ -35,19 +35,15 @@ class HomeComponent extends Component {
   }
 
   change(str) {
-    if (str.message === 'a') {
-      const element = document.getElementById(str.name) // Get element
-      if (element != null) {
-        element.style.visibility = 'visible'
-        console.log('changed on Database')
-      } else {
-        window.location.reload(true)
-      }
-    }
 
-    if (str.message === 'c') {
-      window.location.reload(true)
-    }
+    console.log(str)
+    console.log("woo")
+    
+
+      axios.get(config.geturl() + `tweets?status=ACCEPTED`).then((res) => {
+      this.setState({ newtweets: res.data.tweets })
+    })     
+    
   }
 
   render() {
@@ -55,7 +51,7 @@ class HomeComponent extends Component {
       <Carousel
         autoPlay
         interval='3000'
-        transitionTime='1000'
+        transitionTime='2000'
         infiniteLoop='true'
       >
         <div>
@@ -67,7 +63,7 @@ class HomeComponent extends Component {
 
         <div>
           <Row className='card-container'>
-            {this.state.newtweets.map((tweet) => (
+            {this.state.newtweets.reverse().map((tweet) => (
               <Col lg={4} md={6} key={tweet.id}>
                 <Card id={tweet.id}>
                   <Card.Body>
